@@ -10,10 +10,10 @@ namespace RedisRepository
         private readonly IDatabase _database;
         private readonly IValueConverter<T> _converter;
 
-        public RedisSetRepository(ConnectionMultiplexer connection, int db)
+        public RedisSetRepository(RedisRepositoryOptions redisRepositoryOptions)
         {
-            _connection = connection;
-            _database = _connection.GetDatabase(db);
+            _connection = redisRepositoryOptions.ConnectionMultiplexer;
+            _database = _connection.GetDatabase(redisRepositoryOptions.Db);
 
             if (typeof(T) == typeof(string))
             {
@@ -33,7 +33,7 @@ namespace RedisRepository
 
                 var redisValues = _database.SortedSetRangeByRank(key, start, stop, order);
 
-                var values = redisValues.Where(redisValue => redisValue.HasValue)
+                var members = redisValues.Where(redisValue => redisValue.HasValue)
                                         .Select(redisValue => 
                                         {
                                             try
@@ -47,7 +47,7 @@ namespace RedisRepository
                                         })
                                         .Where(value => value != null);
 
-                return values;
+                return members;
             }
             catch (Exception e)
             {
@@ -55,12 +55,12 @@ namespace RedisRepository
             }
         }
 
-        public bool Add(string key, T value, double score)
+        public bool Add(string key, T member, double score)
         {
             try
             {
-                var member = _converter.Serialize(value);
-                return _database.SortedSetAdd(key, member, score);
+                var value = _converter.Serialize(member);
+                return _database.SortedSetAdd(key, value, score);
             }
             catch (Exception e)
             {
@@ -68,12 +68,12 @@ namespace RedisRepository
             }
         }
 
-        public bool Remove(string key, T value)
+        public bool Remove(string key, T member)
         {
             try
             {
-                var member = _converter.Serialize(value);
-                return _database.SortedSetRemove(key, member);
+                var value = _converter.Serialize(member);
+                return _database.SortedSetRemove(key, value);
             }
             catch (Exception e)
             {

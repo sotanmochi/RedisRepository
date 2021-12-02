@@ -10,11 +10,11 @@ namespace RedisRepository
         private readonly IDatabase _database;
         private readonly int _db;
 
-        public RedisClientUtility(ConnectionMultiplexer connection, int db)
+        public RedisClientUtility(RedisRepositoryOptions redisRepositoryOptions)
         {
-            _connection = connection;
-            _database = _connection.GetDatabase(db);
-            _db = db;
+            _connection = redisRepositoryOptions.ConnectionMultiplexer;
+            _database = _connection.GetDatabase(redisRepositoryOptions.Db);
+            _db = redisRepositoryOptions.Db;
         }
 
         public IEnumerable<T> FindAll<T>(string keyPattern = "*")

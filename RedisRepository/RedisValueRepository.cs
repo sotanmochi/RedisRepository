@@ -10,10 +10,10 @@ namespace RedisRepository
         private readonly IDatabase _database;
         private readonly IValueConverter<T> _converter;
 
-        public RedisValueRepository(ConnectionMultiplexer connection, int db)
+        public RedisValueRepository(RedisRepositoryOptions redisRepositoryOptions)
         {
-            _connection = connection;
-            _database = _connection.GetDatabase(db);
+            _connection = redisRepositoryOptions.ConnectionMultiplexer;
+            _database = _connection.GetDatabase(redisRepositoryOptions.Db);
 
             if (typeof(T) == typeof(string))
             {
