@@ -4,7 +4,7 @@ using RedisRepository;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-    public static class ServiceCollectionExtensions
+    public static class RedisRepositoryServiceCollectionExtensions
     {
         public static IServiceCollection AddRedisRepository(this IServiceCollection services, Action<RedisRepositoryOptions> configure)
         {
