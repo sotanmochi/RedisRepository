@@ -13,7 +13,13 @@ namespace RedisSampleApp
             var connection = ConnectionMultiplexer.Connect("localhost");
             Console.WriteLine("[RedisSampleApp] Connected redis server");
 
-            var userRepository = new RedisValueRepository<User>(connection, 1);
+            var options = new RedisRepositoryOptions()
+            {
+                ConnectionMultiplexer = connection,
+                Db = 1,
+            };
+
+            var userRepository = new RedisValueRepository<User>(options);
 
             var testUser = new User()
             {
