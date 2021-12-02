@@ -2,7 +2,7 @@ using System;
 using StackExchange.Redis;
 using RedisRepository.Converter;
 
-namespace RedisSampleApp
+namespace RedisRepository
 {
     public class RedisSetRepository<T>
     {

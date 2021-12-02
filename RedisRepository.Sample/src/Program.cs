@@ -46,4 +46,12 @@ namespace RedisSampleApp
             Console.WriteLine("[RedisSampleApp] End");
         }
     }
+
+    public class User
+    {
+        public string Id;
+        public string Name;
+        public string Description;
+        public string OrganizationId;
+    }
 }
